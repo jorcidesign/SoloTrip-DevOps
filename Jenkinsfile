@@ -8,39 +8,43 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('⬇️ Checkout') {
             steps {
-                checkout scm
+                git branch: 'main',
+                    credentialsId: 'github-token',
+                    url: 'https://github.com/jorcidesign/SoloTrip-DevOps.git'
             }
         }
 
-        stage('Backend Build') {
+        stage('☕ Backend: Compilar') {
             steps {
                 dir('AppBackEnd') {
-                    sh 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -DskipTests -B'
                 }
             }
         }
         
-        stage('Backend Tests') {
+        stage('🧪 Backend: Tests') {
             steps {
                 dir('AppBackEnd') {
-                    sh 'mvn test'
+                    sh 'mvn test -B'
                 }
             }
         }
 
-        stage('Frontend Install') {
+        stage('📦 Frontend: Instalar') {
             steps {
-                dir('AppFrontEnd') {
+                // CORREGIDO: Ahora apunta a la carpeta real
+                dir('DemoFrontEnd') {
                     sh 'npm install'
                 }
             }
         }
 
-        stage('Frontend Build') {
+        stage('🏗️ Frontend: Build') {
             steps {
-                dir('AppFrontEnd') {
+                // CORREGIDO: Ahora apunta a la carpeta real
+                dir('DemoFrontEnd') {
                     sh 'npm run build'
                 }
             }
