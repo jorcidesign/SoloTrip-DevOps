@@ -1,0 +1,19 @@
+# --- Java / Spring Boot ---
+target/
+*.class
+*.jar
+*.war
+.mvn/
+mvnw
+mvnw.cmd
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# --- Angular / Node ---
+AppFrontEnd/node_modules/
+AppFrontEnd/dist/
+AppFrontEnd/.angular/
+*.log
+npm-debug.log*
