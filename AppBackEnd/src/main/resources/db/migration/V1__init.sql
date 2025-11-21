@@ -43,7 +43,7 @@ INSERT INTO roles (name) VALUES ('ROLE_ADMIN'), ('ROLE_USER');
 
 -- Insertar usuario admin (password: admin123)
 INSERT INTO users (username, password, email, enabled) 
-VALUES ('admin', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'admin@solotrip.com', true);
+VALUES ('admin', '$2a$12$PL/q6IgzAEl4tjMUl776U.uLyebJLpFtUctANAUajWHlUpVTLrgr6', 'admin@solotrip.com', true);
 
 -- Asignar rol admin al usuario admin
 INSERT INTO user_roles (user_id, role_id) 
