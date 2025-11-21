@@ -6,6 +6,11 @@ pipeline {
         maven 'Maven3'
         nodejs 'NodeJS'
     }
+    
+    environment {
+        // Definimos dónde está el scanner
+        scannerHome = tool 'SonarScanner'
+    }
 
     stages {
         stage('⬇️ Checkout') {
@@ -16,7 +21,24 @@ pipeline {
             }
         }
 
-        stage('☕ Backend: Compilar') {
+        stage('🔍 Análisis de Calidad') {
+            steps {
+                dir('AppBackEnd') {
+                    // Jenkins usa el token configurado para hablar con SonarQube
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=SoloTrip-Backend \
+                            -Dsonar.projectName="SoloTrip Backend" \
+                            -Dsonar.sources=src/main/java \
+                            -Dsonar.java.binaries=target/classes
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('☕ Backend: Build') {
             steps {
                 dir('AppBackEnd') {
                     sh 'mvn clean package -DskipTests -B'
@@ -32,9 +54,8 @@ pipeline {
             }
         }
 
-        stage('📦 Frontend: Instalar') {
+        stage('📦 Frontend: Install') {
             steps {
-                // CORREGIDO: Ahora apunta a la carpeta real
                 dir('DemoFrontEnd') {
                     sh 'npm install'
                 }
@@ -43,7 +64,6 @@ pipeline {
 
         stage('🏗️ Frontend: Build') {
             steps {
-                // CORREGIDO: Ahora apunta a la carpeta real
                 dir('DemoFrontEnd') {
                     sh 'npm run build'
                 }
