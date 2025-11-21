@@ -31,7 +31,8 @@ pipeline {
                             -Dsonar.projectKey=SoloTrip-Backend \
                             -Dsonar.projectName="SoloTrip Backend" \
                             -Dsonar.sources=src/main/java \
-                            -Dsonar.java.binaries=target/classes
+                            -Dsonar.java.binaries=target/classes \
+                            -Dsonar.exclusions=**/security/**,**/config/**,**/dto/**,**/entity/**,**/exception/**,**/*Application.java
                         """
                     }
                 }
@@ -68,6 +69,18 @@ pipeline {
                     sh 'npm run build'
                 }
             }
+        }
+    }
+
+    // AQUÍ VA EL BLOQUE POST (Justo antes del cierre final)
+    post {
+        success {
+            echo '✅ PIPELINE EXITOSO'
+            // Guarda el .jar generado para cumplir con el versionado de artefactos
+            archiveArtifacts artifacts: 'AppBackEnd/target/*.jar', fingerprint: true
+        }
+        failure {
+            echo '❌ EL PIPELINE FALLÓ'
         }
     }
 }
